@@ -17,7 +17,7 @@ logger = logging.getLogger(__name__)
 
 PYBITES_SUBDIR = 'pybites'
 
-ImgBanner = namedtuple('Banner', 'name image1 image2 text background')
+ImgBanner = namedtuple('Banner', 'name image1 image2 text price discount background background_transparency remove_background')
 
 
 def login_required(test):
@@ -40,7 +40,11 @@ def _store_banner(data):
         banner.image_url1 = data.image1
         banner.image_url2 = data.image2
         banner.text = data.text
+        banner.price = data.price
+        banner.discount = data.discount
         banner.background = data.background
+        banner.background_transparency = data.background_transparency
+        banner.remove_background = data.remove_background
     else:
         banner = Banner(data)
         db.session.add(banner)
@@ -49,6 +53,7 @@ def _store_banner(data):
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+
     user = None
     status_code = 200
     if request.method == 'POST':
@@ -101,7 +106,11 @@ def index(bannerid=None):
             form.image_url1.data = banner.image_url1
             form.image_url2.data = banner.image_url2
             form.text.data = banner.text
+            form.price.data = banner.price
+            form.discount.data = banner.discount
             form.background.data = banner.background
+            form.background_transparency.data = banner.background_transparency
+            form.remove_background.data = banner.remove_background
 
     # else if post request validate and generate banner image
     elif request.method == 'POST' and form.validate():
@@ -109,13 +118,21 @@ def index(bannerid=None):
         image1 = form.image_url1.data
         image2 = form.image_url2.data
         text = form.text.data
+        price = form.price.data
+        discount = form.discount.data
         background = form.background.data
+        background_transparency = form.background_transparency.data
+        remove_background = form.remove_background.data
 
         banner = ImgBanner(name=name,
                            image1=image1,
                            image2=image2,
                            text=text,
-                           background=background)
+                           price=price,
+                           discount=discount,
+                           background=background,
+                           background_transparency=background_transparency,
+                           remove_background=remove_background)
 
         if session.get('logged_in'):
             _store_banner(banner)
@@ -136,4 +153,4 @@ def index(bannerid=None):
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=True, host='10.10.254.17', port=5004)

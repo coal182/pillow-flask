@@ -1,6 +1,6 @@
 {% macro render_field(field) %}
-  <div>
-		{{ field.label }}
+  <div class="mb-3">
+		{{ field.label(class_='form-label"') }}
 		{{ field(**kwargs)|safe }}
 		{% if field.errors %}
 			<ul class=errors>

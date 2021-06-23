@@ -1,39 +1,50 @@
 {% extends "base.html" %}
 {% block content %}
 
-		{% from "_formhelpers.html" import render_field %}
-		<form class="pure-form pure-form-stacked" id="imageForm" method=post>
-			<fieldset>
-				{{ render_field(form.name) }}
-				{{ render_field(form.image_url1) }}
-				{{ render_field(form.image_url2) }}
-				{{ render_field(form.text) }}
-				{{ render_field(form.background) }}
-				<button type=submit class="pure-button pure-button-primary">Generate banner</button>
-			</fieldset>
-		</form>
+  <div class="row">
+    <div class="col">
+      {% from "_formhelpers.html" import render_field %}
+      <form class="pure-form pure-form-stacked" id="imageForm" method=post>
+        <fieldset>
+          {{ render_field(form.name) }}
+          {{ render_field(form.image_url1) }}
+          {{ render_field(form.image_url2) }}
+          {{ render_field(form.remove_background) }}
+          {{ render_field(form.text) }}
+          {{ render_field(form.price) }}
+          {{ render_field(form.discount) }}
+          {{ render_field(form.background) }}
+          {{ render_field(form.background_transparency) }}
+          <button type=submit class="btn btn-primary">Generate banner</button>
+        </fieldset>
+      </form>
+    </div>
+		<div class="col">
+      <table class="pure-table" id="imageCache">
+        <thead>
+          <th>Cached Banners</th>
+        </thead>
+        <tbody>
+          {% if session.get('logged_in') %}
 
-<table class="pure-table" id="imageCache">
-  <thead>
-    <th>Cached Banners</th>
-  </thead>
-  <tbody>
-    {% if session.get('logged_in') %}
+            {% for banner in banners %}
+              <tr>
+                <td><a href="{{ url_for('index', bannerid=banner.id) }}">{{ banner.name }}</a></td>
+              </tr>
+            {% endfor %}
 
-      {% for banner in banners %}
-        <tr>
-          <td><a href="{{ url_for('index', bannerid=banner.id) }}">{{ banner.name }}</a></td>
-        </tr>
-      {% endfor %}
+          {% else %}
 
-    {% else %}
+            <tr>
+              <td><a href="{{ url_for('login') }}">login</a> to cache your banners</td>
+            </tr>
 
-      <tr>
-        <td><a href="{{ url_for('login') }}">login</a> to cache your banners</td>
-      </tr>
+          {% endif %}
+        </tbody>
+      </table>
+    </div>
+  </div>
 
-    {% endif %}
-  </tbody>
-</table>
+
 
 	{% endblock %}

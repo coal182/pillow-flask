@@ -17,3 +17,6 @@ SQLAlchemy==1.1.13
 urllib3==1.24.2
 Werkzeug==0.15.3
 WTForms==2.1
+numpy==1.19.1
+rembg==1.0.14
+
